@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -77,7 +76,6 @@ func combineLog() {
 	ops.FO = fo
 	defer fo.Close()
 	for _, f := range files {
-		//Check if regex matches
 		res, err := regexp.MatchString(logFileRegex, f.Name())
 		if err != nil {
 			continue
@@ -85,15 +83,11 @@ func combineLog() {
 		if res == true {
 			ops.Filename = path.Join(logFileDir, f.Name())
 			parseLogFile(ops)
-			log.Print(err)
 		}
-		fmt.Println(f.Name())
-		fmt.Println(res, " ", err)
 	}
 
 }
 func main() {
-	fmt.Println("Hello World")
-	os.Open("file.txt")
+	combineLog()
 	os.Exit(0)
 }
