@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path"
@@ -25,8 +26,7 @@ func parseLogFile(ops parseLogfileOps) {
 	for {
 		line, err := reader.ReadBytes('\n')
 		linestr := string(line)
-		if err != nil {
-			log.Print(err)
+		if err != nil && len(linestr) == 0 {
 			break
 		}
 		for _, regex := range ops.LogLineRegex {
@@ -37,7 +37,10 @@ func parseLogFile(ops parseLogfileOps) {
 			if res == false {
 				continue
 			}
-			ops.FO.Write([]byte(linestr + "\n"))
+			ops.FO.Write([]byte(linestr))
+			break
+		}
+		if err == io.EOF {
 			break
 		}
 	}
